@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Добавляем ссылку на CSS файл -->
+</head>
+<body>
+    <h1>Login</h1>
+    <form id="loginForm">
+        <input type="password" id="password" placeholder="Enter Password">
+        <button type="submit">Login</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('loginForm');
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const password = document.getElementById('password').value;
+                if (password === '98319190') { // замените 'your_password' на фактический пароль
+                    window.location.href = 'create_order.html';
+                } else {
+                    alert('Incorrect password. Please try again.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

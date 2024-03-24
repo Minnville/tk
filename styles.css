@@ -1,0 +1,59 @@
+body {
+    font-family: Arial, sans-serif;
+    margin-left: 20px; /* Измените значение по вашему усмотрению */
+    padding: 0;
+    background-color: #06090E;
+    color: white;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+#activeOrdersList li {
+    margin-bottom: 30px;
+}
+
+input[type="text"] {
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+button.change-status {
+    margin-left: 10px;
+    background-color: #28a745;
+}
+
+button.delete-order {
+    margin-left: 10px;
+    background-color: #dc3545;
+}

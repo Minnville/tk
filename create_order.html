@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Order</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Create Order</h1>
+    <!-- Форма для создания заказа -->
+    <form id="addOrderForm">
+        <input type="text" id="name" placeholder="Name">
+        <input type="text" id="description" placeholder="Description">
+        <input type="text" id="status" placeholder="Status">
+        <button type="submit">Add Order</button>
+    </form>
+    <!-- Список активных заказов -->
+    <h2>Active Orders</h2>
+    <ul id="activeOrdersList"></ul>
+    <!-- Кнопка для перехода к странице активных заказов -->
+    <button onclick="location.href='active_orders.html';">Active Orders</button>
+    <!-- Кнопка для перехода к странице удаленных заказов -->
+    <button onclick="location.href='deleted_orders.html';">Deleted Orders</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const addOrderForm = document.getElementById('addOrderForm');
+            const activeOrdersList = document.getElementById('activeOrdersList');
+
+            // Загрузка списка активных заказов при загрузке страницы
+            loadOrders();
+
+        // Функция для загрузки списка активных заказов
+        function loadOrders() {
+            activeOrdersList.innerHTML = '';
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            orders.forEach((order, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${order.name} - ${order.description} - ${order.status}`; // Включаем описание заказа
+                // Кнопка для изменения статуса заказа
+                const changeStatusButton = document.createElement('button');
+                changeStatusButton.textContent = 'Change Status';
+                changeStatusButton.addEventListener('click', () => {
+                    // Изменяем статус заказа на "Готов к выдаче"
+                    orders[index].status = 'Готов к выдаче';
+                    // Обновляем отображение списка заказов
+                    loadOrders();
+                    // Обновляем данные в локальном хранилище
+                    localStorage.setItem('orders', JSON.stringify(orders));
+                });
+                li.appendChild(changeStatusButton);
+
+                // Кнопка для удаления заказа
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', () => {
+                    // Удаляем заказ из массива заказов
+                    const deletedOrder = orders.splice(index, 1)[0];
+                    // Получаем список удаленных заказов из локального хранилища
+                    let deletedOrders = JSON.parse(localStorage.getItem('deletedOrders')) || [];
+                    // Добавляем удаленный заказ в список удаленных заказов
+                    deletedOrders.push(deletedOrder);
+                    // Сохраняем обновленные списки заказов в локальном хранилище
+                    localStorage.setItem('orders', JSON.stringify(orders));
+                    localStorage.setItem('deletedOrders', JSON.stringify(deletedOrders));
+                    // Обновляем отображение списка активных заказов
+                    loadOrders();
+                });
+                li.appendChild(deleteButton);
+
+                activeOrdersList.appendChild(li);
+            });
+        }
+
+            // Обработка отправки формы для добавления заказа
+            addOrderForm.addEventListener('submit', (e) => {
+                e.preventDefault(); // Предотвращаем отправку формы по умолчанию
+
+                // Получаем значения из полей формы
+                const name = document.getElementById('name').value;
+                const description = document.getElementById('description').value;
+                const status = document.getElementById('status').value;
+
+                // Создаем объект заказа
+                const order = {
+                    name: name,
+                    description: description,
+                    status: status
+                };
+
+                // Получаем существующие заказы из локального хранилища или создаем пустой массив
+                let orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+                // Добавляем новый заказ в массив заказов
+                orders.push(order);
+
+                // Сохраняем обновленный массив заказов в локальное хранилище
+                localStorage.setItem('orders', JSON.stringify(orders));
+
+                // Очищаем поля формы
+                document.getElementById('name').value = '';
+                document.getElementById('description').value = '';
+                document.getElementById('status').value = '';
+
+                // Обновляем отображение списка активных заказов
+                loadOrders();
+            });
+        });
+    </script>
+</body>
+</html>

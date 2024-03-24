@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deleted Orders</title>
+</head>
+<body>
+    <h1>Deleted Orders</h1>
+    <ul id="deletedOrdersList"></ul>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const deletedOrdersList = document.getElementById('deletedOrdersList');
+
+            // Загрузка списка удаленных заказов при загрузке страницы
+            loadDeletedOrders();
+
+            // Функция для загрузки списка удаленных заказов
+            function loadDeletedOrders() {
+                deletedOrdersList.innerHTML = '';
+                const deletedOrders = JSON.parse(localStorage.getItem('deletedOrders')) || [];
+                deletedOrders.forEach(order => {
+                    const li = document.createElement('li');
+                    li.textContent = `${order.name} - ${order.status}`;
+                    deletedOrdersList.appendChild(li);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
