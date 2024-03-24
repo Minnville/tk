@@ -4,55 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Active Orders</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1><< Активные заказы >></h1>
-    <!-- Список активных заказов -->
+    <h1>Active Orders</h1>
     <ul id="activeOrdersList"></ul>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const activeOrdersList = document.getElementById('activeOrdersList');
 
-            // Функция для обновления списка заказов
-            function updateOrderList(orders) {
+            // Функция для загрузки активных заказов с сервера
+            function loadOrdersFromServer() {
+                fetch('https://example.com/api/orders')
+                .then(response => response.json())
+                .then(data => {
+                    displayOrders(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching orders:', error);
+                });
+            }
+
+            // Функция для отображения заказов на странице
+            function displayOrders(orders) {
                 activeOrdersList.innerHTML = '';
-                if (orders.length === 0) {
-                    const noOrdersMessage = document.createElement('p');
-                    noOrdersMessage.textContent = 'В данный момент нет активных заказов';
-                    activeOrdersList.appendChild(noOrdersMessage);
-                } else {
-                    orders.forEach((order) => {
+                if (orders.length > 0) {
+                    orders.forEach(order => {
                         const li = document.createElement('li');
-                        // Отображаем имя, описание и статус заказа
-                        const nameField = document.createElement('span');
-                        nameField.textContent = `Имя Фамилия: ${order.name}`;
-                        const descriptionField = document.createElement('span');
-                        descriptionField.textContent = `Заказ: ${order.description}`;
-                        const statusField = document.createElement('span');
-                        statusField.textContent = `Статус: ${order.status}`;
-                        li.appendChild(nameField);
-                        li.appendChild(document.createElement('br'));
-                        li.appendChild(descriptionField);
-                        li.appendChild(document.createElement('br'));
-                        li.appendChild(statusField);
+                        li.textContent = `Name: ${order.name}, Description: ${order.description}, Status: ${order.status}`;
                         activeOrdersList.appendChild(li);
                     });
+                } else {
+                    const li = document.createElement('li');
+                    li.textContent = 'В данный момент нет активных заказов';
+                    activeOrdersList.appendChild(li);
                 }
             }
 
-            // Функция для загрузки списка активных заказов при загрузке страницы
-            function loadOrders() {
-                const orders = JSON.parse(localStorage.getItem('orders')) || [];
-                updateOrderList(orders);
-            }
+            // Загрузка активных заказов при загрузке страницы
+            loadOrdersFromServer();
 
-            // Загрузка списка активных заказов при загрузке страницы
-            loadOrders();
-
-            // Обновляем список каждые 10 секунд
-            setInterval(loadOrders, 10000);
+            // Обновление списка заказов каждые 10 секунд
+            setInterval(loadOrdersFromServer, 10000);
         });
     </script>
 </body>
